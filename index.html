@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Business Card Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="Business card preview">
+        <div class="preview-topbar">
+          <div>
+            <p class="eyebrow">Card Generator</p>
+            <h1>명함 만들기</h1>
+          </div>
+          <div class="actions">
+            <button id="downloadPng" class="primary-button" type="button">PNG</button>
+            <button id="printPdf" type="button">A4 PDF</button>
+          </div>
+        </div>
+
+        <div class="preview-stage">
+          <article id="cardPreview" class="business-card layout-left font-sans">
+            <div class="card-accent"></div>
+            <div class="card-content">
+              <div class="brand-block">
+                <p id="previewCompany" class="company">NOVA STUDIO</p>
+                <h2 id="previewName">김하린</h2>
+                <p id="previewRole" class="role">Brand Designer</p>
+              </div>
+              <div class="contact-block">
+                <p id="previewPhone">010-1234-5678</p>
+                <p id="previewEmail">hello@novastudio.kr</p>
+                <p id="previewWebsite">novastudio.kr</p>
+                <p id="previewAddress">서울시 마포구 와우산로 23</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="print-sheet" id="printSheet" aria-hidden="true"></div>
+      </section>
+
+      <aside class="controls" aria-label="Card settings">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>정보 입력</h2>
+          </div>
+          <label>
+            이름
+            <input id="nameInput" type="text" value="김하린" />
+          </label>
+          <label>
+            직함
+            <input id="roleInput" type="text" value="Brand Designer" />
+          </label>
+          <label>
+            회사
+            <input id="companyInput" type="text" value="NOVA STUDIO" />
+          </label>
+          <label>
+            전화번호
+            <input id="phoneInput" type="text" value="010-1234-5678" />
+          </label>
+          <label>
+            이메일
+            <input id="emailInput" type="email" value="hello@novastudio.kr" />
+          </label>
+          <label>
+            웹사이트
+            <input id="websiteInput" type="text" value="novastudio.kr" />
+          </label>
+          <label>
+            주소
+            <input id="addressInput" type="text" value="서울시 마포구 와우산로 23" />
+          </label>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>디자인</h2>
+          </div>
+          <div class="button-grid">
+            <button id="randomLayout" type="button">레이아웃 변경</button>
+            <button id="randomFont" type="button">폰트 변경</button>
+          </div>
+          <div class="color-row">
+            <label>
+              명함 색
+              <input id="colorPicker" type="color" value="#2457c5" />
+            </label>
+            <label>
+              색상 코드
+              <input id="colorCode" type="text" value="#2457c5" maxlength="9" />
+            </label>
+          </div>
+        </div>
+
+        <div class="panel compact">
+          <div class="panel-header">
+            <h2>내보내기 설정</h2>
+          </div>
+          <label>
+            A4 한 장 반복 수
+            <select id="copiesSelect">
+              <option value="8" selected>8장</option>
+              <option value="10">10장</option>
+            </select>
+          </label>
+        </div>
+      </aside>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

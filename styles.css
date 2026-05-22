@@ -1,0 +1,416 @@
+:root {
+  --card-color: #2457c5;
+  --card-ink: #172033;
+  --card-muted: #61708a;
+  --card-paper: #ffffff;
+  --surface: #f4f7fb;
+  --panel: #ffffff;
+  --line: #d9e0ec;
+  --shadow: 0 22px 70px rgba(34, 48, 74, 0.16);
+  font-family: Inter, Pretendard, "Noto Sans KR", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #142033;
+  background: var(--surface);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #142033;
+  background: #fff;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+button:hover {
+  border-color: #9aa8bd;
+  box-shadow: 0 8px 24px rgba(33, 44, 65, 0.08);
+  transform: translateY(-1px);
+}
+
+.primary-button {
+  color: #fff;
+  border-color: var(--card-color);
+  background: var(--card-color);
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px;
+  width: min(1280px, calc(100vw - 40px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.preview-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 4px 0 18px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--card-color);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(34px, 5vw, 68px);
+  line-height: 0.95;
+}
+
+.actions,
+.button-grid,
+.color-row {
+  display: grid;
+  gap: 10px;
+}
+
+.actions {
+  grid-template-columns: repeat(2, minmax(86px, 1fr));
+  min-width: 190px;
+}
+
+.preview-stage {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 540px;
+  padding: 44px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(20, 32, 51, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(20, 32, 51, 0.05) 1px, transparent 1px),
+    #edf2f8;
+  background-size: 32px 32px;
+}
+
+.business-card {
+  position: relative;
+  width: min(100%, 520px);
+  aspect-ratio: 1.75 / 1;
+  overflow: hidden;
+  color: var(--card-ink);
+  background: var(--card-paper);
+  box-shadow: var(--shadow);
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  height: 100%;
+  padding: 34px;
+}
+
+.card-accent {
+  position: absolute;
+  inset: 0;
+  background: var(--card-color);
+}
+
+.company,
+.role,
+.contact-block p {
+  margin: 0;
+}
+
+.company {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.business-card h2 {
+  margin: 6px 0 8px;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.role {
+  color: var(--card-muted);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.contact-block {
+  display: grid;
+  align-content: end;
+  gap: 5px;
+  color: var(--card-muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.layout-left .card-accent {
+  right: auto;
+  width: 16px;
+}
+
+.layout-left .card-content {
+  grid-template-columns: 1fr 0.92fr;
+  gap: 24px;
+}
+
+.layout-top .card-accent {
+  bottom: auto;
+  height: 18px;
+}
+
+.layout-top .card-content {
+  grid-template-rows: 1fr auto;
+}
+
+.layout-block .card-accent {
+  inset: auto 0 0 auto;
+  width: 42%;
+  height: 100%;
+  opacity: 0.14;
+}
+
+.layout-block .card-content {
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 26px;
+}
+
+.layout-invert {
+  --card-paper: var(--card-color);
+  --card-ink: #ffffff;
+  --card-muted: rgba(255, 255, 255, 0.74);
+}
+
+.layout-invert .card-accent {
+  inset: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  background: transparent;
+}
+
+.layout-invert .card-content {
+  grid-template-rows: 1fr auto;
+}
+
+.layout-center .card-accent {
+  inset: auto 34px 28px;
+  height: 4px;
+}
+
+.layout-center .card-content {
+  place-items: center;
+  text-align: center;
+}
+
+.layout-center .contact-block {
+  align-content: center;
+}
+
+.font-sans {
+  font-family: Inter, Pretendard, "Noto Sans KR", Arial, sans-serif;
+}
+
+.font-serif {
+  font-family: Georgia, "Noto Serif KR", serif;
+}
+
+.font-mono {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.font-soft {
+  font-family: Avenir, "Trebuchet MS", Pretendard, sans-serif;
+}
+
+.controls {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.panel {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 14px 38px rgba(34, 48, 74, 0.08);
+}
+
+.panel.compact {
+  gap: 12px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel h2 {
+  font-size: 16px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  color: #506077;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #142033;
+  background: #fff;
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid color-mix(in srgb, var(--card-color) 22%, transparent);
+  border-color: var(--card-color);
+}
+
+input[type="color"] {
+  min-height: 52px;
+  padding: 4px;
+}
+
+.button-grid,
+.color-row {
+  grid-template-columns: 1fr 1fr;
+}
+
+.print-sheet {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    width: min(760px, calc(100vw - 28px));
+  }
+
+  .preview-stage {
+    min-height: 420px;
+    padding: 22px;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .preview-topbar,
+  .actions,
+  .button-grid,
+  .color-row {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-topbar {
+    display: grid;
+  }
+
+  .layout-left .card-content,
+  .layout-block .card-content {
+    grid-template-columns: 1fr;
+  }
+
+  .card-content {
+    padding: 22px;
+  }
+
+  .business-card h2 {
+    font-size: 32px;
+  }
+
+  .contact-block {
+    font-size: 12px;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .app-shell {
+    display: block;
+    width: auto;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .preview-topbar,
+  .preview-stage,
+  .controls {
+    display: none;
+  }
+
+  .print-sheet {
+    display: grid;
+    grid-template-columns: repeat(2, 90mm);
+    grid-auto-rows: 51mm;
+    gap: 7mm 8mm;
+    justify-content: center;
+    align-content: start;
+  }
+
+  .print-sheet .business-card {
+    width: 90mm;
+    height: 51mm;
+    box-shadow: none;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-sheet .card-content {
+    padding: 6mm;
+  }
+}
