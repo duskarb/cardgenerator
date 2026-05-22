@@ -1,5 +1,11 @@
 :root {
   --card-color: #2457c5;
+  --name-font: Arial, Helvetica, sans-serif;
+  --body-font: Arial, Helvetica, sans-serif;
+  --name-size: 42px;
+  --body-size: 12px;
+  --name-weight: 800;
+  --body-weight: 400;
   font-family: "Times New Roman", Times, serif;
 }
 
@@ -50,6 +56,17 @@ h2 {
   gap: 8px;
 }
 
+.font-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+#styleStatus {
+  margin: 0;
+  line-height: 1.35;
+}
+
 .preview-stage {
   display: grid;
   place-items: center;
@@ -91,6 +108,8 @@ h2 {
   color: #000;
   text-align: var(--item-align, left);
   transform: translateY(var(--shift-y, 0));
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .company-block {
@@ -118,23 +137,29 @@ h2 {
 }
 
 .company {
-  font-size: 13px;
-  font-weight: bold;
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
 }
 
 .business-card h2 {
   margin: 0;
-  font-size: var(--name-size, 48px);
+  font-family: var(--name-font);
+  font-size: var(--name-size);
+  font-weight: var(--name-weight);
   line-height: 1;
 }
 
 .role {
-  font-size: 16px;
-  font-weight: bold;
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
 }
 
 .contact-block {
-  font-size: 13px;
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
   line-height: 1.35;
 }
 
@@ -199,7 +224,8 @@ input[type="color"] {
   .preview-topbar,
   .actions,
   .button-grid,
-  .color-row {
+  .color-row,
+  .font-controls {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -210,7 +236,7 @@ input[type="color"] {
   }
 
   .business-card h2 {
-    font-size: var(--name-size, 34px);
+    font-size: var(--name-size);
   }
 }
 

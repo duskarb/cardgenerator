@@ -16,6 +16,15 @@ const fonts = ["font-sans", "font-serif", "font-mono", "font-soft"];
 let currentLayout = "layout-left";
 let currentFont = "font-sans";
 let layoutState = null;
+let styleState = {
+  sizeMode: "two",
+  nameFont: "Arial, Helvetica, sans-serif",
+  bodyFont: "Arial, Helvetica, sans-serif",
+  nameSize: 42,
+  bodySize: 12,
+  nameWeight: 800,
+  bodyWeight: 400,
+};
 
 const grid = {
   x: [12.5, 25, 37.5, 50, 62.5, 75, 87.5],
@@ -78,6 +87,48 @@ function makeItem(x, y, align = "left", width = 38, shiftY = 0) {
   };
 }
 
+function fontLabel(value) {
+  if (value.includes("Georgia")) return "Georgia";
+  if (value.includes("Courier")) return "Courier";
+  if (value.includes("Verdana")) return "Verdana";
+  if (value.includes("Times New Roman")) return "Times";
+  return "Arial";
+}
+
+function getStyleValues() {
+  const sizeMode = document.querySelector("#sizeModeSelect").value;
+  const rawNameSize = Number(document.querySelector("#nameSizeInput").value);
+  const rawBodySize = Number(document.querySelector("#bodySizeInput").value);
+  const nameSize = sizeMode === "one" ? clamp(rawNameSize, 12, 20) : clamp(rawNameSize, 18, 58);
+  return {
+    sizeMode,
+    nameFont: document.querySelector("#nameFontSelect").value,
+    bodyFont: document.querySelector("#bodyFontSelect").value,
+    nameSize,
+    bodySize: sizeMode === "one" ? nameSize : clamp(Math.min(rawBodySize, nameSize - 1), 8, 20),
+    nameWeight: Number(document.querySelector("#nameWeightSelect").value),
+    bodyWeight: Number(document.querySelector("#bodyWeightSelect").value),
+  };
+}
+
+function applyTextStyle() {
+  styleState = getStyleValues();
+  document.querySelector("#nameSizeInput").value = styleState.nameSize;
+  document.querySelector("#bodySizeInput").value = styleState.bodySize;
+  const root = document.documentElement;
+  root.style.setProperty("--name-font", styleState.nameFont);
+  root.style.setProperty("--body-font", styleState.bodyFont);
+  root.style.setProperty("--name-size", `${styleState.nameSize}px`);
+  root.style.setProperty("--body-size", `${styleState.bodySize}px`);
+  root.style.setProperty("--name-weight", String(styleState.nameWeight));
+  root.style.setProperty("--body-weight", String(styleState.bodyWeight));
+  document.querySelector("#bodySizeInput").disabled = styleState.sizeMode === "one";
+  document.querySelector("#styleStatus").textContent =
+    `크기 ${styleState.sizeMode === "one" ? "1개" : "2개"} / ` +
+    `이름 ${fontLabel(styleState.nameFont)} ${styleState.nameSize}px ${styleState.nameWeight} / ` +
+    `정보 ${fontLabel(styleState.bodyFont)} ${styleState.bodySize}px ${styleState.bodyWeight}`;
+}
+
 function boxLeft(item) {
   if (item.align === "right") return clamp(item.anchorX - item.width, 4, 96 - item.width);
   if (item.align === "center") return clamp(item.anchorX - item.width / 2, 4, 96 - item.width);
@@ -122,7 +173,19 @@ function buildAxisLayout() {
     system,
     axes: { h: hAxes, v: vAxes },
     items: { company, name, role, contact },
-    nameSize: sample([40, 46, 52, 58]),
+  };
+}
+
+function fallbackLayout() {
+  return {
+    system: { hCount: 1, vCount: 1 },
+    axes: { h: [60], v: [12.5] },
+    items: {
+      company: makeItem(8, 12, "left", 34, 0),
+      name: makeItem(8, 22, "left", 54, 0),
+      role: makeItem(8, 48, "left", 34, 0),
+      contact: makeItem(8, 68, "left", 62, 0),
+    },
   };
 }
 
@@ -140,15 +203,42 @@ function applyAxisLayout(state) {
   applyItem("#nameBlock", state.items.name);
   applyItem("#roleBlock", state.items.role);
   applyItem("#contactBlock", state.items.contact);
-  card.style.setProperty("--name-size", `${state.nameSize}px`);
+}
+
+function rectsOverlap(a, b, gap = 6) {
+  return !(a.right + gap <= b.left || b.right + gap <= a.left || a.bottom + gap <= b.top || b.bottom + gap <= a.top);
+}
+
+function hasLayoutProblem() {
+  const cardRect = card.getBoundingClientRect();
+  const rects = [...card.querySelectorAll(".card-item")].map((node) => node.getBoundingClientRect());
+  const outOfBounds = rects.some(
+    (rect) =>
+      rect.left < cardRect.left + 6 ||
+      rect.top < cardRect.top + 6 ||
+      rect.right > cardRect.right - 6 ||
+      rect.bottom > cardRect.bottom - 6
+  );
+  const overlapping = rects.some((rect, index) => rects.slice(index + 1).some((other) => rectsOverlap(rect, other)));
+  return outOfBounds || overlapping;
+}
+
+function applyReadableLayout() {
+  for (let i = 0; i < 80; i += 1) {
+    const candidate = buildAxisLayout();
+    layoutState = candidate;
+    applyAxisLayout(candidate);
+    if (!hasLayoutProblem()) return;
+  }
+  layoutState = fallbackLayout();
+  applyAxisLayout(layoutState);
 }
 
 function setLayout(layout) {
   card.classList.remove(...layouts);
   card.classList.add(layout);
   currentLayout = layout;
-  layoutState = buildAxisLayout();
-  applyAxisLayout(layoutState);
+  applyReadableLayout();
   buildPrintSheet();
 }
 
@@ -156,6 +246,16 @@ function setFont(font) {
   card.classList.remove(...fonts);
   card.classList.add(font);
   currentFont = font;
+  const fontMap = {
+    "font-sans": "Arial, Helvetica, sans-serif",
+    "font-serif": "Georgia, 'Times New Roman', serif",
+    "font-mono": "'Courier New', Courier, monospace",
+    "font-soft": "Verdana, Geneva, sans-serif",
+  };
+  document.querySelector("#nameFontSelect").value = fontMap[font];
+  document.querySelector("#bodyFontSelect").value = sample([fontMap[font], "Arial, Helvetica, sans-serif"]);
+  applyTextStyle();
+  applyReadableLayout();
   buildPrintSheet();
 }
 
@@ -165,6 +265,7 @@ function syncFields() {
     const output = document.querySelector(outputSelector);
     output.textContent = input.value.trim() || input.placeholder || "";
   });
+  applyReadableLayout();
   buildPrintSheet();
 }
 
@@ -247,7 +348,8 @@ function exportPng() {
   roundedRect(ctx, 0, 0, width, height, 0);
   ctx.fill();
 
-  const family = currentFont === "font-serif" ? "Georgia" : currentFont === "font-mono" ? "Consolas" : "Arial";
+  const nameFamily = fontLabel(styleState.nameFont) === "Courier" ? "Courier New" : fontLabel(styleState.nameFont);
+  const bodyFamily = fontLabel(styleState.bodyFont) === "Courier" ? "Courier New" : fontLabel(styleState.bodyFont);
   const state = layoutState || buildAxisLayout();
   const company = state.items.company;
   const name = state.items.name;
@@ -256,23 +358,30 @@ function exportPng() {
 
   ctx.textAlign = canvasAlign(company);
   ctx.fillStyle = "#000000";
-  ctx.font = `700 26px ${family}`;
+  ctx.font = `${styleState.bodyWeight} ${Math.round(styleState.bodySize * 2.1)}px ${bodyFamily}`;
   ctx.fillText(data.company || " ", canvasX(company, width), canvasY(company, height));
 
   ctx.textAlign = canvasAlign(name);
-  ctx.font = `800 ${Math.round(state.nameSize * 1.7)}px ${family}`;
+  ctx.font = `${styleState.nameWeight} ${Math.round(styleState.nameSize * 2.1)}px ${nameFamily}`;
   ctx.fillText(data.name || " ", canvasX(name, width), canvasY(name, height));
 
   ctx.textAlign = canvasAlign(role);
   ctx.fillStyle = "#000000";
-  ctx.font = `700 31px ${family}`;
+  ctx.font = `${styleState.bodyWeight} ${Math.round(styleState.bodySize * 2.1)}px ${bodyFamily}`;
   ctx.fillText(data.role || " ", canvasX(role, width), canvasY(role, height));
 
   ctx.textAlign = canvasAlign(contact);
   ctx.fillStyle = "#000000";
-  ctx.font = `400 25px ${family}`;
+  ctx.font = `${styleState.bodyWeight} ${Math.round(styleState.bodySize * 2.1)}px ${bodyFamily}`;
   [data.phone, data.email, data.website, data.address].forEach((line, index) => {
-    drawMultiline(ctx, line || " ", canvasX(contact, width), canvasY(contact, height) + index * 35, canvasWidth(contact, width), 27);
+    drawMultiline(
+      ctx,
+      line || " ",
+      canvasX(contact, width),
+      canvasY(contact, height) + index * styleState.bodySize * 2.8,
+      canvasWidth(contact, width),
+      styleState.bodySize * 2.3
+    );
   });
 
   const link = document.createElement("a");
@@ -291,6 +400,22 @@ document.querySelector("#randomLayout").addEventListener("click", () => {
 
 document.querySelector("#randomFont").addEventListener("click", () => {
   setFont(chooseNext(fonts, currentFont));
+});
+
+[
+  "#sizeModeSelect",
+  "#nameFontSelect",
+  "#bodyFontSelect",
+  "#nameSizeInput",
+  "#bodySizeInput",
+  "#nameWeightSelect",
+  "#bodyWeightSelect",
+].forEach((selector) => {
+  document.querySelector(selector).addEventListener("input", () => {
+    applyTextStyle();
+    applyReadableLayout();
+    buildPrintSheet();
+  });
 });
 
 document.querySelector("#colorPicker").addEventListener("input", (event) => {
@@ -315,7 +440,7 @@ document.querySelector("#printPdf").addEventListener("click", () => {
 
 document.querySelector("#copiesSelect").addEventListener("change", buildPrintSheet);
 
-layoutState = buildAxisLayout();
-applyAxisLayout(layoutState);
+applyTextStyle();
+applyReadableLayout();
 syncFields();
 buildPrintSheet();
