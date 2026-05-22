@@ -59,6 +59,7 @@ h2 {
 }
 
 .business-card {
+  position: relative;
   width: min(100%, 520px);
   aspect-ratio: 1.75 / 1;
   color: #000;
@@ -72,9 +73,10 @@ h2 {
 }
 
 .card-content {
-  display: grid;
+  position: relative;
+  display: block;
   height: 100%;
-  padding: 34px;
+  padding: 0;
 }
 
 .company,
@@ -83,14 +85,46 @@ h2 {
   margin: 0;
 }
 
+.card-item {
+  position: absolute;
+  width: var(--item-width, 44%);
+  color: #000;
+  text-align: var(--item-align, left);
+  transform: translateY(var(--shift-y, 0));
+}
+
+.company-block {
+  left: var(--company-x, 8%);
+  top: var(--company-y, 10%);
+  --item-width: 32%;
+}
+
+.name-block {
+  left: var(--name-x, 8%);
+  top: var(--name-y, 28%);
+  --item-width: 62%;
+}
+
+.role-block {
+  left: var(--role-x, 8%);
+  top: var(--role-y, 56%);
+  --item-width: 36%;
+}
+
+.contact-block {
+  left: var(--contact-x, 58%);
+  top: var(--contact-y, 58%);
+  --item-width: 36%;
+}
+
 .company {
   font-size: 13px;
   font-weight: bold;
 }
 
 .business-card h2 {
-  margin: 6px 0 8px;
-  font-size: 48px;
+  margin: 0;
+  font-size: var(--name-size, 48px);
   line-height: 1;
 }
 
@@ -100,31 +134,8 @@ h2 {
 }
 
 .contact-block {
-  display: grid;
-  align-content: end;
-  gap: 5px;
   font-size: 13px;
   line-height: 1.35;
-}
-
-.layout-left .card-content,
-.layout-block .card-content {
-  grid-template-columns: 1fr 0.92fr;
-  gap: 24px;
-}
-
-.layout-top .card-content,
-.layout-invert .card-content {
-  grid-template-rows: 1fr auto;
-}
-
-.layout-center .card-content {
-  place-items: center;
-  text-align: center;
-}
-
-.layout-center .contact-block {
-  align-content: center;
 }
 
 .font-sans {
@@ -199,7 +210,7 @@ input[type="color"] {
   }
 
   .business-card h2 {
-    font-size: 34px;
+    font-size: var(--name-size, 34px);
   }
 }
 
@@ -241,6 +252,6 @@ input[type="color"] {
   }
 
   .print-sheet .card-content {
-    padding: 6mm;
+    padding: 0;
   }
 }
