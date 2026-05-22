@@ -112,54 +112,29 @@ function exportPng() {
 
   const ctx = canvas.getContext("2d");
   ctx.scale(scale, scale);
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = color;
   roundedRect(ctx, 0, 0, width, height, 0);
   ctx.fill();
 
-  if (currentLayout === "layout-invert") {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, width, height);
-    ctx.strokeStyle = "rgba(255,255,255,.4)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(44, 44, width - 88, height - 88);
-  } else if (currentLayout === "layout-left") {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, 34, height);
-  } else if (currentLayout === "layout-top") {
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, width, 38);
-  } else if (currentLayout === "layout-block") {
-    ctx.globalAlpha = 0.14;
-    ctx.fillStyle = color;
-    ctx.fillRect(width * 0.58, 0, width * 0.42, height);
-    ctx.globalAlpha = 1;
-  } else {
-    ctx.fillStyle = color;
-    ctx.fillRect(88, height - 72, width - 176, 8);
-  }
-
-  const inverted = currentLayout === "layout-invert";
   const centered = currentLayout === "layout-center";
-  const ink = inverted ? "#ffffff" : "#172033";
-  const muted = inverted ? "rgba(255,255,255,.76)" : "#61708a";
   const family = currentFont === "font-serif" ? "Georgia" : currentFont === "font-mono" ? "Consolas" : "Arial";
   const leftX = centered ? width / 2 : 78;
   const rightX = currentLayout === "layout-left" || currentLayout === "layout-block" ? 625 : 78;
 
   ctx.textAlign = centered ? "center" : "left";
-  ctx.fillStyle = ink;
+  ctx.fillStyle = "#000000";
   ctx.font = `700 26px ${family}`;
   ctx.fillText(data.company || " ", leftX, centered ? 196 : 150);
 
   ctx.font = `800 82px ${family}`;
   ctx.fillText(data.name || " ", leftX, centered ? 285 : 245);
 
-  ctx.fillStyle = muted;
+  ctx.fillStyle = "#000000";
   ctx.font = `700 31px ${family}`;
   ctx.fillText(data.role || " ", leftX, centered ? 336 : 300);
 
   ctx.textAlign = centered ? "center" : "left";
-  ctx.fillStyle = muted;
+  ctx.fillStyle = "#000000";
   ctx.font = `400 25px ${family}`;
   const contactX = centered ? width / 2 : rightX;
   const contactY = centered ? 408 : 385;
