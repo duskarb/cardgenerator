@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,7 +12,7 @@
         <div class="preview-topbar">
           <div>
             <p class="eyebrow">Card Generator</p>
-            <h1>명함 만들기</h1>
+            <h1>Business Card Maker</h1>
           </div>
           <div class="actions">
             <button id="downloadPng" class="primary-button" type="button">PNG</button>
@@ -28,7 +28,7 @@
                 <p id="previewCompany" class="company">NOVA STUDIO</p>
               </div>
               <div id="nameBlock" class="card-item name-block">
-                <h2 id="previewName">김하린</h2>
+                <h2 id="previewName">Alex Kim</h2>
               </div>
               <div id="roleBlock" class="card-item role-block">
                 <p id="previewRole" class="role">Brand Designer</p>
@@ -37,7 +37,7 @@
                 <p id="previewPhone">010-1234-5678</p>
                 <p id="previewEmail">hello@novastudio.kr</p>
                 <p id="previewWebsite">novastudio.kr</p>
-                <p id="previewAddress">서울시 마포구 와우산로 23</p>
+                <p id="previewAddress">Seoul, Korea</p>
               </div>
             </div>
           </article>
@@ -49,70 +49,70 @@
       <aside class="controls" aria-label="Card settings">
         <div class="panel">
           <div class="panel-header">
-            <h2>정보 입력</h2>
+            <h2>Information</h2>
           </div>
           <label>
-            이름
-            <input id="nameInput" type="text" value="김하린" />
+            Name
+            <input id="nameInput" type="text" value="Alex Kim" />
           </label>
           <label>
-            직함
+            Title
             <input id="roleInput" type="text" value="Brand Designer" />
           </label>
           <label>
-            회사
+            Company
             <input id="companyInput" type="text" value="NOVA STUDIO" />
           </label>
           <label>
-            전화번호
+            Phone
             <input id="phoneInput" type="text" value="010-1234-5678" />
           </label>
           <label>
-            이메일
+            Email
             <input id="emailInput" type="email" value="hello@novastudio.kr" />
           </label>
           <label>
-            웹사이트
+            Website
             <input id="websiteInput" type="text" value="novastudio.kr" />
           </label>
           <label>
-            주소
-            <input id="addressInput" type="text" value="서울시 마포구 와우산로 23" />
+            Address
+            <input id="addressInput" type="text" value="Seoul, Korea" />
           </label>
         </div>
 
         <div class="panel">
           <div class="panel-header">
-            <h2>디자인</h2>
+            <h2>Design</h2>
           </div>
           <div class="button-grid">
-            <button id="randomLayout" type="button">레이아웃 변경</button>
-            <button id="randomFont" type="button">폰트 변경</button>
+            <button id="randomLayout" type="button">Randomize Layout</button>
+            <button id="randomFont" type="button">Randomize Type</button>
           </div>
           <div class="color-row">
             <label>
-              명함 색
+              Card Color
               <input id="colorPicker" type="color" value="#ffffff" />
             </label>
             <label>
-              색상 코드
+              Color Code
               <input id="colorCode" type="text" value="#ffffff" maxlength="9" />
             </label>
           </div>
           <div>
-            <h3>현재 글자</h3>
+            <h3>Current Type</h3>
             <p id="styleStatus"></p>
           </div>
           <label>
-            크기 모드
+            Size Mode
             <select id="sizeModeSelect">
-              <option value="two" selected>2개</option>
-              <option value="one">1개</option>
+              <option value="two" selected>2 sizes</option>
+              <option value="one">1 size</option>
             </select>
           </label>
           <div class="font-controls">
             <label>
-              이름 폰트
+              Name Font
               <select id="nameFontSelect">
                 <option value="Inter, Arial, Helvetica, sans-serif" selected>Inter</option>
                 <option value="Arial, Helvetica, sans-serif">Arial</option>
@@ -123,7 +123,7 @@
               </select>
             </label>
             <label>
-              정보 폰트
+              Info Font
               <select id="bodyFontSelect">
                 <option value="Inter, Arial, Helvetica, sans-serif" selected>Inter</option>
                 <option value="Arial, Helvetica, sans-serif">Arial</option>
@@ -134,15 +134,15 @@
               </select>
             </label>
             <label>
-              이름 크기
+              Name Size
               <input id="nameSizeInput" type="number" min="12" max="58" value="42" />
             </label>
             <label>
-              정보 크기
+              Info Size
               <input id="bodySizeInput" type="number" min="8" max="20" value="12" />
             </label>
             <label>
-              이름 굵기
+              Name Weight
               <select id="nameWeightSelect">
                 <option value="400">400</option>
                 <option value="700">700</option>
@@ -151,7 +151,7 @@
               </select>
             </label>
             <label>
-              정보 굵기
+              Info Weight
               <select id="bodyWeightSelect">
                 <option value="400" selected>400</option>
                 <option value="700">700</option>
@@ -163,13 +163,13 @@
 
         <div class="panel compact">
           <div class="panel-header">
-            <h2>내보내기 설정</h2>
+            <h2>Export</h2>
           </div>
           <label>
-            A4 한 장 반복 수
+            Copies on A4
             <select id="copiesSelect">
-              <option value="8" selected>8장</option>
-              <option value="10">10장</option>
+              <option value="8" selected>8 cards</option>
+              <option value="10">10 cards</option>
             </select>
           </label>
         </div>

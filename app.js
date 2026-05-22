@@ -142,12 +142,12 @@ function applyTextStyle() {
   root.style.setProperty("--name-weight", String(styleState.nameWeight));
   root.style.setProperty("--body-weight", String(styleState.bodyWeight));
   document.querySelector("#bodySizeInput").disabled = styleState.sizeMode === "one";
-  const fontCount = styleState.nameFont === styleState.bodyFont ? "1개" : "2개";
+  const fontCount = styleState.nameFont === styleState.bodyFont ? 1 : 2;
   document.querySelector("#styleStatus").textContent =
-    `폰트 ${fontCount} / ` +
-    `크기 ${styleState.sizeMode === "one" ? "1개" : "2개"} / ` +
-    `이름 ${fontLabel(styleState.nameFont)} ${styleState.nameSize}px ${styleState.nameWeight} / ` +
-    `정보 ${fontLabel(styleState.bodyFont)} ${styleState.bodySize}px ${styleState.bodyWeight}`;
+    `Fonts ${fontCount} / ` +
+    `Sizes ${styleState.sizeMode === "one" ? "1" : "2"} / ` +
+    `Name ${fontLabel(styleState.nameFont)} ${styleState.nameSize}px ${styleState.nameWeight} / ` +
+    `Info ${fontLabel(styleState.bodyFont)} ${styleState.bodySize}px ${styleState.bodyWeight}`;
 }
 
 function boxLeft(item) {
@@ -277,11 +277,10 @@ function setFont(font) {
   document.querySelector("#nameFontSelect").value = fontMap[font];
   document.querySelector("#bodyFontSelect").value = sample([fontMap[font], "Inter, Arial, Helvetica, sans-serif"]);
   applyTextStyle();
-  applyReadableLayout();
   buildPrintSheet();
 }
 
-function randomizeTypography() {
+function makeRandomTypeStyle() {
   const fontCount = sample([1, 2]);
   const sizeMode = sample(["one", "two"]);
   const nameFont = sample(fontChoices);
@@ -291,7 +290,7 @@ function randomizeTypography() {
   const nameWeight = sample([400, 700, 800, 900]);
   const bodyWeight = sample([400, 700, 800]);
 
-  writeStyleControls({
+  return {
     sizeMode,
     nameFont,
     bodyFont,
@@ -299,9 +298,33 @@ function randomizeTypography() {
     bodySize,
     nameWeight,
     bodyWeight,
-  });
+  };
+}
+
+function randomizeTypography() {
+  const previousStyle = { ...styleState };
+  const previousControls = {
+    sizeMode: document.querySelector("#sizeModeSelect").value,
+    nameFont: document.querySelector("#nameFontSelect").value,
+    bodyFont: document.querySelector("#bodyFontSelect").value,
+    nameSize: Number(document.querySelector("#nameSizeInput").value),
+    bodySize: Number(document.querySelector("#bodySizeInput").value),
+    nameWeight: Number(document.querySelector("#nameWeightSelect").value),
+    bodyWeight: Number(document.querySelector("#bodyWeightSelect").value),
+  };
+
+  for (let i = 0; i < 80; i += 1) {
+    writeStyleControls(makeRandomTypeStyle());
+    applyTextStyle();
+    if (!hasLayoutProblem()) {
+      buildPrintSheet();
+      return;
+    }
+  }
+
+  writeStyleControls(previousControls);
+  styleState = previousStyle;
   applyTextStyle();
-  applyReadableLayout();
   buildPrintSheet();
 }
 
@@ -445,7 +468,6 @@ document.querySelector("#randomLayout").addEventListener("click", () => {
 });
 
 document.querySelector("#randomFont").addEventListener("click", () => {
-  setFont(chooseNext(fonts, currentFont));
   randomizeTypography();
 });
 
@@ -460,7 +482,6 @@ document.querySelector("#randomFont").addEventListener("click", () => {
 ].forEach((selector) => {
   document.querySelector(selector).addEventListener("input", () => {
     applyTextStyle();
-    applyReadableLayout();
     buildPrintSheet();
   });
 });
