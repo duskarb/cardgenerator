@@ -12,14 +12,22 @@ const fields = {
 };
 
 const layouts = ["layout-left", "layout-top", "layout-block", "layout-invert", "layout-center"];
-const fonts = ["font-sans", "font-serif", "font-mono", "font-soft"];
+const fonts = ["font-inter", "font-sans", "font-serif", "font-mono", "font-soft"];
+const fontChoices = [
+  "Inter, Arial, Helvetica, sans-serif",
+  "Arial, Helvetica, sans-serif",
+  "Georgia, 'Times New Roman', serif",
+  "'Courier New', Courier, monospace",
+  "Verdana, Geneva, sans-serif",
+  "'Times New Roman', Times, serif",
+];
 let currentLayout = "layout-left";
-let currentFont = "font-sans";
+let currentFont = "font-inter";
 let layoutState = null;
 let styleState = {
   sizeMode: "two",
-  nameFont: "Arial, Helvetica, sans-serif",
-  bodyFont: "Arial, Helvetica, sans-serif",
+  nameFont: "Inter, Arial, Helvetica, sans-serif",
+  bodyFont: "Inter, Arial, Helvetica, sans-serif",
   nameSize: 42,
   bodySize: 12,
   nameWeight: 800,
@@ -88,11 +96,22 @@ function makeItem(x, y, align = "left", width = 38, shiftY = 0) {
 }
 
 function fontLabel(value) {
+  if (value.includes("Inter")) return "Inter";
   if (value.includes("Georgia")) return "Georgia";
   if (value.includes("Courier")) return "Courier";
   if (value.includes("Verdana")) return "Verdana";
   if (value.includes("Times New Roman")) return "Times";
   return "Arial";
+}
+
+function writeStyleControls(nextStyle) {
+  document.querySelector("#sizeModeSelect").value = nextStyle.sizeMode;
+  document.querySelector("#nameFontSelect").value = nextStyle.nameFont;
+  document.querySelector("#bodyFontSelect").value = nextStyle.bodyFont;
+  document.querySelector("#nameSizeInput").value = nextStyle.nameSize;
+  document.querySelector("#bodySizeInput").value = nextStyle.bodySize;
+  document.querySelector("#nameWeightSelect").value = nextStyle.nameWeight;
+  document.querySelector("#bodyWeightSelect").value = nextStyle.bodyWeight;
 }
 
 function getStyleValues() {
@@ -123,7 +142,9 @@ function applyTextStyle() {
   root.style.setProperty("--name-weight", String(styleState.nameWeight));
   root.style.setProperty("--body-weight", String(styleState.bodyWeight));
   document.querySelector("#bodySizeInput").disabled = styleState.sizeMode === "one";
+  const fontCount = styleState.nameFont === styleState.bodyFont ? "1개" : "2개";
   document.querySelector("#styleStatus").textContent =
+    `폰트 ${fontCount} / ` +
     `크기 ${styleState.sizeMode === "one" ? "1개" : "2개"} / ` +
     `이름 ${fontLabel(styleState.nameFont)} ${styleState.nameSize}px ${styleState.nameWeight} / ` +
     `정보 ${fontLabel(styleState.bodyFont)} ${styleState.bodySize}px ${styleState.bodyWeight}`;
@@ -247,13 +268,38 @@ function setFont(font) {
   card.classList.add(font);
   currentFont = font;
   const fontMap = {
+    "font-inter": "Inter, Arial, Helvetica, sans-serif",
     "font-sans": "Arial, Helvetica, sans-serif",
     "font-serif": "Georgia, 'Times New Roman', serif",
     "font-mono": "'Courier New', Courier, monospace",
     "font-soft": "Verdana, Geneva, sans-serif",
   };
   document.querySelector("#nameFontSelect").value = fontMap[font];
-  document.querySelector("#bodyFontSelect").value = sample([fontMap[font], "Arial, Helvetica, sans-serif"]);
+  document.querySelector("#bodyFontSelect").value = sample([fontMap[font], "Inter, Arial, Helvetica, sans-serif"]);
+  applyTextStyle();
+  applyReadableLayout();
+  buildPrintSheet();
+}
+
+function randomizeTypography() {
+  const fontCount = sample([1, 2]);
+  const sizeMode = sample(["one", "two"]);
+  const nameFont = sample(fontChoices);
+  const bodyFont = fontCount === 1 ? nameFont : sample(fontChoices.filter((font) => font !== nameFont));
+  const bodySize = sizeMode === "one" ? sample([12, 13, 14, 15, 16, 18, 20]) : sample([8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  const nameSize = sizeMode === "one" ? bodySize : sample([22, 26, 30, 34, 38, 42, 46, 52, 58].filter((size) => size > bodySize));
+  const nameWeight = sample([400, 700, 800, 900]);
+  const bodyWeight = sample([400, 700, 800]);
+
+  writeStyleControls({
+    sizeMode,
+    nameFont,
+    bodyFont,
+    nameSize,
+    bodySize,
+    nameWeight,
+    bodyWeight,
+  });
   applyTextStyle();
   applyReadableLayout();
   buildPrintSheet();
@@ -400,6 +446,7 @@ document.querySelector("#randomLayout").addEventListener("click", () => {
 
 document.querySelector("#randomFont").addEventListener("click", () => {
   setFont(chooseNext(fonts, currentFont));
+  randomizeTypography();
 });
 
 [
