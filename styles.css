@@ -2,10 +2,14 @@
   --card-color: #ffffff;
   --name-font: Inter, Arial, Helvetica, sans-serif;
   --body-font: Inter, Arial, Helvetica, sans-serif;
-  --name-size: 42px;
-  --body-size: 12px;
+  --name-size: 8.08;
+  --body-size: 2.31;
   --name-weight: 800;
   --body-weight: 400;
+  --guide-v: 50%;
+  --guide-h: 50%;
+  --margin-x: 7%;
+  --margin-y: 12.25%;
   font-family: "Times New Roman", Times, serif;
 }
 
@@ -23,12 +27,20 @@ button,
 input,
 select {
   font: inherit;
+  max-width: 100%;
 }
 
 .app-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 20px;
+  align-items: start;
+}
+
+.workspace {
+  min-width: 0;
+  position: sticky;
+  top: 16px;
 }
 
 .preview-topbar {
@@ -52,13 +64,151 @@ h2 {
 .button-grid,
 .color-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+.button-grid button:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 .font-controls {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.manual-controls {
+  display: grid;
+  gap: 10px;
+}
+
+.manual-controls[hidden] {
+  display: none;
+}
+
+.checkbox-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.checkbox-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-layer-list {
+  display: grid;
+  gap: 12px;
+}
+
+.info-group {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #000;
+  background: #f7f7f7;
+}
+
+.info-group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.folder-icon {
+  position: relative;
+  width: 18px;
+  height: 13px;
+  border: 1px solid #000;
+}
+
+.folder-icon::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: -5px;
+  width: 8px;
+  height: 5px;
+  border: 1px solid #000;
+  border-bottom: 0;
+  background: #f7f7f7;
+}
+
+.layer-tools {
+  display: grid;
+  align-content: center;
+}
+
+.layer-tools .drag-handle {
+  display: grid;
+  place-items: center;
+  min-height: 24px;
+  width: 24px;
+  border: 1px solid #000;
+  cursor: grab;
+  color: #000;
+}
+
+.info-layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.info-layer.is-dragging {
+  opacity: 0.45;
+}
+
+.info-layer.drop-join-top::before,
+.info-layer.drop-join-bottom::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  background: #0055ff;
+  z-index: 10;
+}
+
+.info-layer.drop-join-top::before {
+  top: -2px;
+}
+
+.info-layer.drop-join-bottom::after {
+  bottom: -2px;
+}
+
+.info-group.drop-new-top::before,
+.info-group.drop-new-bottom::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  height: 6px;
+  background: #ff0055;
+  border-radius: 3px;
+  z-index: 10;
+}
+
+.info-group.drop-new-top::before {
+  top: -10px;
+}
+
+.info-group.drop-new-bottom::after {
+  bottom: -10px;
+}
+
+.contact-fields {
+  display: grid;
   gap: 8px;
 }
 
@@ -76,6 +226,7 @@ h2 {
 }
 
 .business-card {
+  container-type: inline-size;
   position: relative;
   width: min(100%, 520px);
   aspect-ratio: 1.75 / 1;
@@ -89,6 +240,136 @@ h2 {
   display: none;
 }
 
+.guide-line {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.margin-line {
+  display: none;
+  position: absolute;
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.manual-mode .guide-line {
+  display: block;
+}
+
+.manual-mode .margin-line {
+  display: block;
+}
+
+.guide-line[hidden] {
+  display: none;
+}
+
+.margin-line[hidden] {
+  display: none;
+}
+
+.guide-line-v {
+  top: 0;
+  bottom: 0;
+  left: var(--guide-v);
+  width: 14px;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+}
+
+.guide-line-h {
+  left: 0;
+  right: 0;
+  top: var(--guide-h);
+  height: 14px;
+  cursor: ns-resize;
+  transform: translateY(-50%);
+}
+
+.guide-line::after {
+  content: "";
+  position: absolute;
+  background: #ff0000;
+}
+
+.guide-line-v::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.guide-line-h::after {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.margin-line-left,
+.margin-line-right {
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+}
+
+.margin-line-left {
+  left: var(--margin-x);
+}
+
+.margin-line-right {
+  left: calc(100% - var(--margin-x));
+}
+
+.margin-line-top,
+.margin-line-bottom {
+  left: 0;
+  right: 0;
+  height: 12px;
+  cursor: ns-resize;
+  transform: translateY(-50%);
+}
+
+.margin-line-top {
+  top: var(--margin-y);
+}
+
+.margin-line-bottom {
+  top: calc(100% - var(--margin-y));
+}
+
+.margin-line::after {
+  content: "";
+  position: absolute;
+  border-color: #ff0000;
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.margin-line-left::after,
+.margin-line-right::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left-width: 1px;
+  transform: translateX(-50%);
+}
+
+.margin-line-top::after,
+.margin-line-bottom::after {
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top-width: 1px;
+  transform: translateY(-50%);
+}
+
 .card-content {
   position: relative;
   display: block;
@@ -98,7 +379,7 @@ h2 {
 
 .company,
 .role,
-.contact-block p {
+.detail-block p {
   margin: 0;
 }
 
@@ -130,7 +411,7 @@ h2 {
   --item-width: 36%;
 }
 
-.contact-block {
+.detail-block {
   left: var(--contact-x, 58%);
   top: var(--contact-y, 58%);
   --item-width: 36%;
@@ -138,27 +419,27 @@ h2 {
 
 .company {
   font-family: var(--body-font);
-  font-size: var(--body-size);
+  font-size: calc(var(--body-size) * 1cqw);
   font-weight: var(--body-weight);
 }
 
 .business-card h2 {
   margin: 0;
   font-family: var(--name-font);
-  font-size: var(--name-size);
+  font-size: calc(var(--name-size) * 1cqw);
   font-weight: var(--name-weight);
   line-height: 1;
 }
 
 .role {
   font-family: var(--body-font);
-  font-size: var(--body-size);
+  font-size: calc(var(--body-size) * 1cqw);
   font-weight: var(--body-weight);
 }
 
-.contact-block {
+.detail-block {
   font-family: var(--body-font);
-  font-size: var(--body-size);
+  font-size: calc(var(--body-size) * 1cqw);
   font-weight: var(--body-weight);
   line-height: 1.35;
 }
@@ -187,11 +468,13 @@ h2 {
   display: grid;
   align-content: start;
   gap: 16px;
+  min-width: 0;
 }
 
 .panel {
   display: grid;
   gap: 10px;
+  min-width: 0;
   padding: 12px;
   border: 1px solid #000;
 }
@@ -203,11 +486,14 @@ h2 {
 label {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 input,
 select,
 button {
+  width: 100%;
+  min-width: 0;
   min-height: 32px;
 }
 
@@ -218,6 +504,24 @@ input[type="color"] {
 
 .print-sheet {
   display: none;
+}
+
+.icon-btn {
+  width: 28px !important;
+  height: 28px !important;
+  min-height: 0 !important;
+  flex: none;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 !important;
+  display: grid;
+  place-items: center;
+}
+.icon-btn:hover {
+  background: rgba(255, 0, 85, 0.1);
+  border-radius: 4px;
 }
 
 @media (max-width: 900px) {
@@ -240,7 +544,7 @@ input[type="color"] {
   }
 
   .business-card h2 {
-    font-size: var(--name-size);
+    font-size: calc(var(--name-size) * 1cqw);
   }
 }
 
@@ -279,6 +583,14 @@ input[type="color"] {
     break-inside: avoid;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  .print-sheet .guide-line {
+    display: none;
+  }
+
+  .print-sheet .margin-line {
+    display: none;
   }
 
   .print-sheet .card-content {

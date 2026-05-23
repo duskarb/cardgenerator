@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Business Card Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800;900&family=Barlow:wght@400;700;800;900&family=Cormorant+Garamond:wght@400;700&family=DM+Sans:wght@400;700;800;900&family=EB+Garamond:wght@400;700;800&family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Lora:wght@400;700&family=Oswald:wght@400;700&family=Outfit:wght@400;700;800;900&family=Playfair+Display:wght@400;700;800;900&family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -23,6 +26,12 @@
         <div class="preview-stage">
           <article id="cardPreview" class="business-card layout-left font-inter">
             <div class="card-accent"></div>
+            <div class="guide-line guide-line-v" data-guide="v" aria-hidden="true"></div>
+            <div class="guide-line guide-line-h" data-guide="h" aria-hidden="true"></div>
+            <div class="margin-line margin-line-left" data-margin-guide="left" aria-hidden="true"></div>
+            <div class="margin-line margin-line-right" data-margin-guide="right" aria-hidden="true"></div>
+            <div class="margin-line margin-line-top" data-margin-guide="top" aria-hidden="true"></div>
+            <div class="margin-line margin-line-bottom" data-margin-guide="bottom" aria-hidden="true"></div>
             <div class="card-content">
               <div id="companyBlock" class="card-item company-block">
                 <p id="previewCompany" class="company">NOVA STUDIO</p>
@@ -33,10 +42,16 @@
               <div id="roleBlock" class="card-item role-block">
                 <p id="previewRole" class="role">Brand Designer</p>
               </div>
-              <div id="contactBlock" class="card-item contact-block">
+              <div id="phoneBlock" class="card-item detail-block">
                 <p id="previewPhone">010-1234-5678</p>
+              </div>
+              <div id="emailBlock" class="card-item detail-block">
                 <p id="previewEmail">hello@novastudio.kr</p>
+              </div>
+              <div id="websiteBlock" class="card-item detail-block">
                 <p id="previewWebsite">novastudio.kr</p>
+              </div>
+              <div id="addressBlock" class="card-item detail-block">
                 <p id="previewAddress">Seoul, Korea</p>
               </div>
             </div>
@@ -51,34 +66,109 @@
           <div class="panel-header">
             <h2>Information</h2>
           </div>
-          <label>
-            Name
-            <input id="nameInput" type="text" value="Alex Kim" />
-          </label>
-          <label>
-            Title
-            <input id="roleInput" type="text" value="Brand Designer" />
-          </label>
-          <label>
-            Company
-            <input id="companyInput" type="text" value="NOVA STUDIO" />
-          </label>
-          <label>
-            Phone
-            <input id="phoneInput" type="text" value="010-1234-5678" />
-          </label>
-          <label>
-            Email
-            <input id="emailInput" type="email" value="hello@novastudio.kr" />
-          </label>
-          <label>
-            Website
-            <input id="websiteInput" type="text" value="novastudio.kr" />
-          </label>
-          <label>
-            Address
-            <input id="addressInput" type="text" value="Seoul, Korea" />
-          </label>
+          <div id="infoLayerList" class="info-layer-list" aria-label="Information layers">
+            <section class="info-layer" data-item="name" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Name</span>
+                <input id="nameInput" type="text" value="Namkyu Yeo" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="role" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Role</span>
+                <input id="roleInput" type="text" value="designer" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="company" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Company</span>
+                <input id="companyInput" type="text" value="KAIST id" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="phone" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Phone</span>
+                <input id="phoneInput" type="text" value="010-7101-5732" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="email" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Email</span>
+                <input id="emailInput" type="text" value="prism011312@gmail.com" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="website" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Website</span>
+                <input id="websiteInput" type="text" value="www.yeonamkyu.com" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+            <section class="info-layer" data-item="address" draggable="true">
+              <div class="layer-tools">
+                <span class="drag-handle" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>
+                  </svg>
+                </span>
+              </div>
+              <label style="display: flex; gap: 8px; width: 100%;">
+                <span style="width: 60px;">Address</span>
+                <input id="addressInput" type="text" value="Seoul, Korea" style="flex: 1;" />
+                <button class="delete-btn icon-btn" type="button" aria-label="Delete field" style="color: #ff0055; padding: 0 4px;">×</button>
+              </label>
+            </section>
+          </div>
+          <button id="addCustomFieldBtn" type="button" class="action-btn" style="width: 100%; margin-top: 12px; border: 1px dashed #000; background: transparent; cursor: pointer;">
+            + Add Custom Field
+          </button>
         </div>
 
         <div class="panel">
@@ -88,7 +178,50 @@
           <div class="button-grid">
             <button id="randomLayout" type="button">Randomize Layout</button>
             <button id="randomFont" type="button">Randomize Type</button>
+            <button id="randomFontPair" type="button">Randomize Fonts</button>
           </div>
+          <label>
+            Layout Mode
+            <select id="layoutModeSelect">
+              <option value="auto" selected>Auto</option>
+              <option value="manual">Manual</option>
+            </select>
+          </label>
+          <div id="manualControls" class="manual-controls" hidden>
+            <div class="checkbox-row">
+              <label>
+                <input id="manualGuidesVisible" type="checkbox" checked />
+                Show guides
+              </label>
+              <label>
+                <input id="manualVEnabled" type="checkbox" checked />
+                Vertical guide
+              </label>
+            </div>
+            <div class="checkbox-row">
+              <label>
+                <input id="manualHEnabled" type="checkbox" checked />
+                Horizontal guide
+              </label>
+              <span aria-hidden="true"></span>
+            </div>
+            <label>
+              Vertical Position
+              <input id="manualVInput" type="range" min="24" max="76" value="50" />
+            </label>
+            <label>
+              Horizontal Position
+              <input id="manualHInput" type="range" min="24" max="76" value="50" />
+            </label>
+            <label>
+              Margin
+              <input id="manualMarginInput" type="range" min="0" max="18" value="7" />
+            </label>
+          </div>
+          <label>
+            Gutter
+            <input id="gutterInput" type="range" min="4" max="30" value="12" />
+          </label>
           <div class="color-row">
             <label>
               Card Color
@@ -114,23 +247,45 @@
             <label>
               Name Font
               <select id="nameFontSelect">
-                <option value="Inter, Arial, Helvetica, sans-serif" selected>Inter</option>
-                <option value="Arial, Helvetica, sans-serif">Arial</option>
-                <option value="Georgia, 'Times New Roman', serif">Georgia</option>
-                <option value="'Courier New', Courier, monospace">Courier</option>
-                <option value="Verdana, Geneva, sans-serif">Verdana</option>
-                <option value="'Times New Roman', Times, serif">Times</option>
+                <option value="Inter, sans-serif" selected>Inter</option>
+                <option value="'DM Sans', sans-serif">DM Sans</option>
+                <option value="Outfit, sans-serif">Outfit</option>
+                <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+                <option value="Syne, sans-serif">Syne</option>
+                <option value="Barlow, sans-serif">Barlow</option>
+                <option value="'Barlow Condensed', sans-serif">Barlow Condensed</option>
+                <option value="Oswald, sans-serif">Oswald</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                <option value="'EB Garamond', serif">EB Garamond</option>
+                <option value="Lora, serif">Lora</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Space Mono', monospace">Space Mono</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+                <option value="'Courier New', monospace">Courier New</option>
               </select>
             </label>
             <label>
               Info Font
               <select id="bodyFontSelect">
-                <option value="Inter, Arial, Helvetica, sans-serif" selected>Inter</option>
-                <option value="Arial, Helvetica, sans-serif">Arial</option>
-                <option value="Georgia, 'Times New Roman', serif">Georgia</option>
-                <option value="'Courier New', Courier, monospace">Courier</option>
-                <option value="Verdana, Geneva, sans-serif">Verdana</option>
-                <option value="'Times New Roman', Times, serif">Times</option>
+                <option value="Inter, sans-serif" selected>Inter</option>
+                <option value="'DM Sans', sans-serif">DM Sans</option>
+                <option value="Outfit, sans-serif">Outfit</option>
+                <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+                <option value="Syne, sans-serif">Syne</option>
+                <option value="Barlow, sans-serif">Barlow</option>
+                <option value="'Barlow Condensed', sans-serif">Barlow Condensed</option>
+                <option value="Oswald, sans-serif">Oswald</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                <option value="'EB Garamond', serif">EB Garamond</option>
+                <option value="Lora, serif">Lora</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Space Mono', monospace">Space Mono</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+                <option value="'Courier New', monospace">Courier New</option>
               </select>
             </label>
             <label>
